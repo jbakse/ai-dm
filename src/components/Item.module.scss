@@ -1,0 +1,29 @@
+.Item {
+  padding: 0.5em;
+  width: 1200px;
+
+  display: flex;
+}
+
+.json {
+  width: 300px;
+  font-family: monospace;
+  white-space: pre-wrap;
+  padding: 1em;
+}
+
+.description {
+  width: 300px;
+  margin: 0 1em;
+  padding: 1em;
+  font-family: "Courier New", Courier, monospace;
+  line-height: 1.5;
+}
+
+.description h1 {
+  font-weight: bold;
+}
+
+.description p {
+  margin-top: 0.5em;
+}
