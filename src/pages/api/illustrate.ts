@@ -6,7 +6,10 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-export default async function show(req: NextApiRequest, res: NextApiResponse) {
+export default async function illustrate(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   if (!configuration.apiKey) {
     res.status(500).json({
       error: {
@@ -26,6 +29,7 @@ export default async function show(req: NextApiRequest, res: NextApiResponse) {
     console.log(JSON.stringify(response.data, null, 2));
     const image_url = response.data.data[0].url;
     res.status(200).json({ url: image_url });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {

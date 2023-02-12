@@ -1,10 +1,10 @@
 import * as React from "react";
 
-export interface IButtonBarProps {
+export interface Props {
   buttons: { name: string; action: () => void }[];
 }
 
-export function ButtonBar({ buttons }: IButtonBarProps) {
+export function ButtonBar({ buttons }: Props) {
   return (
     <ul>
       {buttons.map((button) => (

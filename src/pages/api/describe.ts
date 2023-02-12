@@ -22,9 +22,11 @@ export default async function describe(
 
   try {
     const completion = await openai.createCompletion({
+      // https://platform.openai.com/docs/models/gpt-3
       model: "text-davinci-003",
-      // model: "text-babbage-001",
       // model: "text-curie-001",
+      // model: "text-babbage-001",
+      // model: "text-ada-001",
       prompt: generatePrompt(req.body.prefix || "", req.body.item || {}),
       temperature: 0.9,
       max_tokens: 200,
@@ -32,6 +34,7 @@ export default async function describe(
 
     console.log("describe", JSON.stringify(completion.data, null, 2));
     res.status(200).json({ result: completion.data.choices[0].text });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {
@@ -48,6 +51,7 @@ export default async function describe(
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function generatePrompt(prefix = "", data: any) {
   const pickedData = {
     type: data.type,
