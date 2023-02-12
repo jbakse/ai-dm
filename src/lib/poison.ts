@@ -46,7 +46,7 @@ export async function describePoison(data: JSONValue) {
   const result = await postData("/api/describe", {
     prefix: `Describe a fantasy poison based on the following json.
       Embellish. Avoid numbers.
-      Return result as json object with the following fields:
+      Return result as only a json object with the following fields:
       name: short distictive name
       poison: physical description of the poison including flavor, smell, appearance, and effects
       container: physical descritpion of the container
