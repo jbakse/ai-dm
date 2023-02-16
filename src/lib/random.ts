@@ -15,7 +15,7 @@ export function sample<T>(array: T[], n = 1): T[] {
 }
 
 // pick, provides a random element from an array
-export function pick<T>(array: T[]): T {
+export function choose<T>(array: T[]): T {
   const index = Math.floor(Math.random() * array.length);
   return array[index];
 }

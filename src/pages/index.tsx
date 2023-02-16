@@ -4,26 +4,42 @@ import { useState } from "react";
 import { ButtonBar } from "../components/ButtonBar";
 import { ItemCard } from "../components/ItemCard";
 import { Item } from "../lib/item";
-import { generatePoison, describePoison } from "../lib/poison";
+// import { Console } from "../components/Console";
+import {
+  generatePoison,
+  describePoisonName,
+  describePoisonDescription,
+  describePoisonContainer,
+} from "../lib/poison";
 
 export default function Home() {
   const [items, setItems] = useState([] as Item[]);
 
+  function updateItem(item: Item) {
+    // replace instances of item in items with a copy of the new item
+    setItems((items) => items.map((i) => (i.id === item.id ? { ...item } : i)));
+  }
+
   async function addPoison() {
     const poison = generatePoison();
-    setItems([...items, poison]);
+    setItems([poison, ...items]);
 
-    const description = await describePoison(poison.data);
-    poison.name = description.name;
-    poison.description = description.description;
-    poison.notes = description.notes;
+    // const description = await describePoison(poison.data);
+    // poison.name = description.name;
+    // poison.description = description.description;
+    // poison.notes = description.notes;
 
-    // this next bit is a bit crazy, since you can't just
-    // update a deep property...
-    // replace instances of p with a copy of the updated p
-    setItems((items) =>
-      items.map((item) => (item === poison ? { ...poison } : item))
-    );
+    poison.name = await describePoisonName(poison);
+    updateItem(poison);
+
+    poison.description = await describePoisonDescription(poison);
+    updateItem(poison);
+
+    // have it prompt for the container using the data AND name
+    poison.notes.container = await describePoisonContainer(poison);
+    updateItem(poison);
+
+    // add console
   }
   const buttons = [{ name: "Poison", action: addPoison }];
 
@@ -40,6 +56,7 @@ export default function Home() {
           <ItemCard key={item.id} item={item} description={item.description} />
         ))}
       </main>
+      {/* <Console name="GPT" /> */}
     </>
   );
 }
