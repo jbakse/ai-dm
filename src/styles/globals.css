@@ -34,8 +34,9 @@ footer, header, hgroup, menu, nav, section {
 
 
 body {
-	font-family: monospace;
-	line-height: 1;
+	font-family: Courier, monospace;
+	font-size: 18px;
+	line-height: 1.5;
 }
 
 ol, ul {
@@ -62,7 +63,3 @@ main  {
   padding: .5em;
 }
 
-main,
-main div {
-  background: rgba(0, 0, 0, .05);
-}

@@ -6,6 +6,7 @@ import { JSONObject, JSONValue, summarizer } from "./types";
 import { dedent } from "./util";
 
 type PoisonData = ReturnType<typeof generatePoisonData>;
+
 export interface Poison extends Item {
   type: "poison";
   data: PoisonData;
@@ -55,9 +56,10 @@ export async function describePoisonName(poison: Poison): Promise<string> {
       pick(poison.data, ["properties", "ingredients", "effects"]),
       summarizer
     )}
+    Return only the name. Do not include any puntuation.
   `);
   console.log(prompt);
-  return await postData("/api/describe2", { prompt });
+  return await postData("/api/describe", { prompt });
 }
 
 export async function describePoisonDescription(
@@ -76,7 +78,7 @@ export async function describePoisonDescription(
     )}
   `);
   console.log(prompt);
-  return await postData("/api/describe2", { prompt });
+  return await postData("/api/describe", { prompt });
 }
 
 // describePoisonContainer
@@ -89,7 +91,7 @@ export async function describePoisonContainer(poison: Poison): Promise<string> {
   `);
 
   console.log(prompt);
-  return await postData("/api/describe2", { prompt });
+  return await postData("/api/describe", { prompt });
 }
 
 const degrees = [

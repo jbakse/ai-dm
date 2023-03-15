@@ -1,0 +1,22 @@
+.ButtonBar {
+  padding: 1em;
+  background: #fdf;
+  margin-top: 1em;
+}
+
+.ButtonBar button {
+  border: none;
+  background: white;
+
+  padding: 0.5em;
+  font-family: inherit;
+
+  cursor: pointer;
+
+  &:hover {
+    background: #eee;
+  }
+  &::before {
+    content: "+ ";
+  }
+}

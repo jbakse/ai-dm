@@ -1,4 +1,4 @@
-// function removes whitespace from start end of every line and strips empty lines
+// removes whitespace from start end of every line and strips empty lines
 export function dedent(s: string): string {
   return s
     .split("\n")

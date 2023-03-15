@@ -24,22 +24,14 @@ export default function Home() {
     const poison = generatePoison();
     setItems([poison, ...items]);
 
-    // const description = await describePoison(poison.data);
-    // poison.name = description.name;
-    // poison.description = description.description;
-    // poison.notes = description.notes;
-
     poison.name = await describePoisonName(poison);
     updateItem(poison);
 
     poison.description = await describePoisonDescription(poison);
     updateItem(poison);
 
-    // have it prompt for the container using the data AND name
     poison.notes.container = await describePoisonContainer(poison);
     updateItem(poison);
-
-    // add console
   }
   const buttons = [{ name: "Poison", action: addPoison }];
 
@@ -50,13 +42,13 @@ export default function Home() {
       </Head>
       <main>
         <h1>AI DM</h1>
+
         <ButtonBar buttons={buttons} />
 
         {items.map((item) => (
-          <ItemCard key={item.id} item={item} description={item.description} />
+          <ItemCard key={item.id} item={item} />
         ))}
       </main>
-      {/* <Console name="GPT" /> */}
     </>
   );
 }

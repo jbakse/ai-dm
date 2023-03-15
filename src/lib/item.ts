@@ -13,7 +13,8 @@ export interface Item {
 
 export function makeItem(): Item {
   return {
-    id: Math.random().toString(36).slice(2),
+    // generate id with 11 digits 0-9, a-z
+    id: Math.random().toString(36).slice(2).padEnd(11, "0"),
     type: "item",
     data: {},
     name: "unnamed",
