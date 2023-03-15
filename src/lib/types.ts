@@ -1,25 +1,35 @@
-export type JSONValue =
-  | null
+// defines a type for a JSON serializable value
+// this compact version is from
+// https://dev.to/ankittanna/how-to-create-a-type-for-complex-json-object-in-typescript-d81
+
+type JSONValue =
   | string
   | number
   | boolean
-  | JSONObject
-  | JSONArray;
+  | { [x: string]: JSONValue }
+  | Array<JSONValue>;
 
-export type JSONObject = {
-  [x: string]: JSONValue; // | (() => string);
-};
+// defines a type for a JSON serializable value
+// this was working well until combined with immer which led to error:
+// "Type instantiation is excessively deep and possibly infinite"
 
-export type JSONArray = JSONValue[];
+// export type JSONValue =
+//   | null
+//   | string
+//   | number
+//   | boolean
+//   | JSONObject
+//   | JSONArray;
 
-export function isJSONObject(o: JSONValue): o is JSONObject {
-  return typeof o === "object" && !Array.isArray(o) && o !== null;
-}
+// export type JSONObject = {
+//   [x: string]: JSONValue;
+// };
 
-const x = {} as JSONValue;
-if (isJSONObject(x)) {
-  x.foo = "bar";
-}
+// export type JSONArray = JSONValue[];
+
+// export function isJSONObject(o: JSONValue): o is JSONObject {
+//   return typeof o === "object" && !Array.isArray(o) && o !== null;
+// }
 
 interface Summarizable {
   summarize(): string;
