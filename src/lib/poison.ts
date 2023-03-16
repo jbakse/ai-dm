@@ -2,8 +2,6 @@ import pick from "lodash/pick";
 import { sample, choose } from "./random";
 import { Item, makeItem } from "./item";
 import { postData } from "./network";
-import { summarizer } from "./types";
-import { dedent } from "./util";
 import { buildPrompt } from "./util";
 
 type PoisonData = ReturnType<typeof generatePoisonData>;
@@ -47,6 +45,15 @@ function generateEffect() {
   };
 
   return effect;
+}
+
+export async function* describePoison(poison: Poison): AsyncGenerator<Poison> {
+  poison.name = await describePoisonName(poison);
+  yield poison;
+  poison.description = await describePoisonDescription(poison);
+  yield poison;
+  poison.notes.container = await describePoisonContainer(poison);
+  yield poison;
 }
 
 export async function describePoisonName(poison: Poison): Promise<string> {

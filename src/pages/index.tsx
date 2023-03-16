@@ -11,6 +11,7 @@ import {
   describePoisonName,
   describePoisonDescription,
   describePoisonContainer,
+  describePoison,
 } from "../lib/poison";
 
 export default function Home() {
@@ -23,24 +24,30 @@ export default function Home() {
       draft.push(poison);
     });
 
-    const name = await describePoisonName(poison);
-    poison.name = name;
-    setItems((draft) => {
-      const i = draft.find((i) => i.id === poison.id);
-      if (i) i.name = name;
-    });
+    for await (const p of describePoison(poison)) {
+      setItems((draft) => {
+        const i = draft.findIndex((i) => i.id === poison.id);
+        if (i > -1) draft[i] = { ...p };
+      });
+    }
+    // const name = await describePoisonName(poison);
+    // poison.name = name;
+    // setItems((draft) => {
+    //   const i = draft.find((i) => i.id === poison.id);
+    //   if (i) i.name = name;
+    // });
 
-    const description = await describePoisonDescription(poison);
-    setItems((draft) => {
-      const i = draft.find((i) => i.id === poison.id);
-      if (i) i.description = description;
-    });
+    // const description = await describePoisonDescription(poison);
+    // setItems((draft) => {
+    //   const i = draft.find((i) => i.id === poison.id);
+    //   if (i) i.description = description;
+    // });
 
-    const container = await describePoisonContainer(poison);
-    setItems((draft) => {
-      const i = draft.find((i) => i.id === poison.id);
-      if (i) i.notes.container = container;
-    });
+    // const container = await describePoisonContainer(poison);
+    // setItems((draft) => {
+    //   const i = draft.find((i) => i.id === poison.id);
+    //   if (i) i.notes.container = container;
+    // });
   }
 
   const buttons = [{ name: "Poison", action: addPoison }];

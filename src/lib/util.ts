@@ -1,5 +1,5 @@
 // removes whitespace from start end of every line and strips empty lines
-export function dedent(s: string): string {
+function dedent(s: string): string {
   return s
     .split("\n")
     .map((s) => s.trim())
@@ -7,6 +7,9 @@ export function dedent(s: string): string {
     .join("\n");
 }
 
+// tag function preps a template string
+// serializes objects to json
+// removes whitespace from start end of every line and strips empty lines
 export function buildPrompt(
   strings: TemplateStringsArray,
   ...values: unknown[]
