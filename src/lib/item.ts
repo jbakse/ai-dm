@@ -4,11 +4,7 @@ export type ItemType = string;
 export interface Item {
   id: string;
   type: ItemType;
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  // data: any;
   data: JSONValue;
-
   name: string;
   description: string;
   notes: Record<string, string>;

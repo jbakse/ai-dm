@@ -74,6 +74,7 @@
     "unicorn/consistent-function-scoping": "off",
     "unicorn/no-array-callback-reference": "off",
     "unicorn/prevent-abbreviations": "off",
+    "unicorn/no-array-reduce": "off",
 
     // typescript
     // I suggest you add those two rules:

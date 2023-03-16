@@ -1,6 +1,7 @@
 import { Configuration, OpenAIApi } from "openai";
 import { RequiredError } from "openai/dist/base";
 import type { NextApiRequest, NextApiResponse } from "next";
+
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -12,8 +13,17 @@ const config = {
   //  model: "text-curie-001",
   //  model: "text-babbage-001",
   //  model: "text-ada-001",
-  temperature: 0.8,
-  max_tokens: 200,
+  // system: "",
+  prompt: "",
+  suffix: null,
+  max_tokens: 16,
+  temperature: 1,
+  top_p: 1,
+  n: 1,
+  stream: false,
+  stop: null,
+  presence_penalty: 0,
+  frequency_penalty: 0,
 } as const;
 
 const costs = {
@@ -29,10 +39,8 @@ export default async function describe2(
 ) {
   try {
     const completion = await openai.createCompletion({
-      model: config.model,
-      temperature: config.temperature,
-      max_tokens: config.max_tokens,
-      prompt: req.body.prompt,
+      ...config,
+      ...req.body,
     });
 
     const prompt_tokens = completion.data.usage?.prompt_tokens ?? 0;

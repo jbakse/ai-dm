@@ -2,10 +2,13 @@ import pick from "lodash/pick";
 import { sample, choose } from "./random";
 import { Item, makeItem } from "./item";
 import { postData } from "./network";
-import { JSONObject, JSONValue, summarizer } from "./types";
+import { summarizer } from "./types";
 import { dedent } from "./util";
+import { buildPrompt } from "./util";
 
 type PoisonData = ReturnType<typeof generatePoisonData>;
+
+const theme = "fantasy rpg";
 
 export interface Poison extends Item {
   type: "poison";
@@ -16,16 +19,15 @@ export function generatePoison(): Poison {
   const item = makeItem();
   item.type = "poison";
   item.data = generatePoisonData();
-  item.description = "loading...";
 
   return item as Poison;
 }
 
-function generatePoisonData(): JSONValue {
+function generatePoisonData(): object {
   return {
     properties: sample(colors, 1),
     ingredients: [...sample(poisons, 1), ...sample(herbs, 2)],
-    effects: [generateEffect() /*, generateEffect()*/],
+    effects: [generateEffect()],
     containerProperties: [
       ...sample(containerTypes),
       ...sample(containerProperties, 2),
@@ -44,54 +46,50 @@ function generateEffect() {
     // },
   };
 
-  return effect as unknown as JSONObject;
+  return effect;
 }
 
-const theme = "fantasy rpg";
 export async function describePoisonName(poison: Poison): Promise<string> {
-  const prompt = dedent(`
+  return await postData("/api/describe", {
+    prompt: buildPrompt`
     Create a name for a fictional poison based on the following json description.
-    Use a ${theme} theme.
-    ${JSON.stringify(
-      pick(poison.data, ["properties", "ingredients", "effects"]),
-      summarizer
-    )}
-    Return only the name. Do not include any puntuation.
-  `);
-  console.log(prompt);
-  return await postData("/api/describe", { prompt });
+
+    ${pick(poison.data, ["properties", "ingredients", "effects"])}
+    `,
+    logit_bias: {
+      8764: -10, // poison
+      // 15_931: -10, // ""
+      // 1: -10, // "
+    },
+  });
 }
 
 export async function describePoisonDescription(
   poison: Poison
 ): Promise<string> {
-  // prettier-ignore
-  const prompt = dedent(`
-    Breifly describe a fictional poison named "${
-      poison.name
-    }" based on the following json description.
+  return await postData("/api/describe", {
+    // prettier-ignore
+    prompt: buildPrompt`
+    Breifly describe a fictional poison named ${poison.name} based on the following json description.
     Embellish.
-    Use a ${theme} theme.
-    ${JSON.stringify(
-      pick(poison.data, ["properties", "ingredients", "effects"]),
-      summarizer
-    )}
-  `);
-  console.log(prompt);
-  return await postData("/api/describe", { prompt });
+    ${pick(poison.data, ["properties", "ingredients", "effects"])}
+  `,
+    max_tokens: 100,
+  });
 }
 
 // describePoisonContainer
 export async function describePoisonContainer(poison: Poison): Promise<string> {
   // prettier-ignore
-  const prompt = dedent(`
-    Breifly describe the conainter of a fictional poison named "${poison.name}" based on the following json description.
+  return await postData("/api/describe", {
+    // prettier-ignore
+    prompt: buildPrompt`
+    Breifly describe the conainter of a fictional poison named ${poison.name} based on the following json description.
     Use a ${theme} theme.
-    ${JSON.stringify(pick(poison.data, ["containerProperties"]), summarizer)}
-  `);
-
-  console.log(prompt);
-  return await postData("/api/describe", { prompt });
+    ${pick(poison.data, ["containerProperties"])}
+  `,
+    max_tokens: 100,
+  });
 }
 
 const degrees = [

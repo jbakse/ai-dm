@@ -1,8 +1,6 @@
-import { JSONObject } from "./types";
-
 export async function postData(
   endPoint: string,
-  data: JSONObject
+  data: object
 ): Promise<string> {
   const response = await fetch(endPoint, {
     method: "POST",

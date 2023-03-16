@@ -2,6 +2,7 @@ import React from "react";
 import Head from "next/head";
 // import { useState } from "react";
 import { useImmer } from "use-immer";
+import { setAutoFreeze } from "immer";
 import { ButtonBar } from "../components/ButtonBar";
 import { ItemCard } from "../components/ItemCard";
 import { Item } from "../lib/item";
@@ -15,18 +16,15 @@ import {
 export default function Home() {
   const [items, setItems] = useImmer([] as Item[]);
 
-  // function updateItem(item: Item) {
-  //   // replace instances of item in items with a copy of the new item
-  //   setItems((items) => items.map((i) => (i.id === item.id ? { ...item } : i)));
-  // }
-
   async function addPoison() {
     const poison = generatePoison();
+    setAutoFreeze(false);
     setItems((draft) => {
       draft.push(poison);
     });
 
     const name = await describePoisonName(poison);
+    poison.name = name;
     setItems((draft) => {
       const i = draft.find((i) => i.id === poison.id);
       if (i) i.name = name;
@@ -47,6 +45,7 @@ export default function Home() {
 
   const buttons = [{ name: "Poison", action: addPoison }];
 
+  console.log(items);
   return (
     <>
       <Head>

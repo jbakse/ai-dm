@@ -6,3 +6,18 @@ export function dedent(s: string): string {
     .filter((line) => line.length > 0)
     .join("\n");
 }
+
+export function buildPrompt(
+  strings: TemplateStringsArray,
+  ...values: unknown[]
+) {
+  const o = strings.reduce((acc, str, i) => {
+    if (typeof values[i] === "string") {
+      return acc + str + (values[i] ?? "");
+    } else {
+      return acc + str + JSON.stringify(values[i] ?? "");
+    }
+  }, "");
+
+  return dedent(o);
+}
