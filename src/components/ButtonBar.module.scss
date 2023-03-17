@@ -2,6 +2,7 @@
   padding: 1em;
   background: #fdf;
   margin-top: 1em;
+  display: flex;
 }
 
 .ButtonBar button {
@@ -19,4 +20,8 @@
   &::before {
     content: "+ ";
   }
+}
+
+.ButtonBar li:not(:first-child) {
+  margin-left: 1em;
 }

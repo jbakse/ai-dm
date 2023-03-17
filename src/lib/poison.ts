@@ -6,8 +6,6 @@ import { buildPrompt } from "./util";
 
 type PoisonData = ReturnType<typeof generatePoisonData>;
 
-const theme = "fantasy rpg";
-
 export interface Poison extends Item {
   type: "poison";
   data: PoisonData;
@@ -47,13 +45,16 @@ function generateEffect() {
   return effect;
 }
 
-export async function* describePoison(poison: Poison): AsyncGenerator<Poison> {
+export async function describePoison(
+  poison: Poison,
+  updateItem: (p: Poison) => void
+): Promise<void> {
   poison.name = await describePoisonName(poison);
-  yield poison;
+  updateItem(poison);
   poison.description = await describePoisonDescription(poison);
-  yield poison;
+  updateItem(poison);
   poison.notes.container = await describePoisonContainer(poison);
-  yield poison;
+  updateItem(poison);
 }
 
 export async function describePoisonName(poison: Poison): Promise<string> {
@@ -92,7 +93,7 @@ export async function describePoisonContainer(poison: Poison): Promise<string> {
     // prettier-ignore
     prompt: buildPrompt`
     Breifly describe the conainter of a fictional poison named ${poison.name} based on the following json description.
-    Use a ${theme} theme.
+    
     ${pick(poison.data, ["containerProperties"])}
   `,
     max_tokens: 100,

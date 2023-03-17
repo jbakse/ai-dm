@@ -1,56 +1,49 @@
 import React from "react";
 import Head from "next/head";
-// import { useState } from "react";
-import { useImmer } from "use-immer";
-import { setAutoFreeze } from "immer";
+import { create } from "zustand";
 import { ButtonBar } from "../components/ButtonBar";
 import { ItemCard } from "../components/ItemCard";
 import { Item } from "../lib/item";
-import {
-  generatePoison,
-  describePoisonName,
-  describePoisonDescription,
-  describePoisonContainer,
-  describePoison,
-} from "../lib/poison";
+import { generatePoison, describePoison } from "../lib/poison";
+import { generateWeapon, describeWeapon } from "../lib/weapon";
+
+interface ItemsState {
+  items: Item[];
+  add: (item: Item) => void;
+  update: (item: Item) => void;
+}
+
+const useItems = create<ItemsState>((set) => ({
+  items: [],
+  add: (item: Item) => set((state) => ({ items: [...state.items, item] })),
+  update: (item: Item) =>
+    set((state) => ({
+      items: state.items.map((i) => (i.id === item.id ? { ...item } : i)),
+    })),
+}));
 
 export default function Home() {
-  const [items, setItems] = useImmer([] as Item[]);
+  // const [items, setItems] = useImmer([] as Item[]);
+  const items = useItems((state) => state.items);
+  const addItem = useItems((state) => state.add);
+  const updateItem = useItems((state) => state.update);
 
   async function addPoison() {
     const poison = generatePoison();
-    setAutoFreeze(false);
-    setItems((draft) => {
-      draft.push(poison);
-    });
-
-    for await (const p of describePoison(poison)) {
-      setItems((draft) => {
-        const i = draft.findIndex((i) => i.id === poison.id);
-        if (i > -1) draft[i] = { ...p };
-      });
-    }
-    // const name = await describePoisonName(poison);
-    // poison.name = name;
-    // setItems((draft) => {
-    //   const i = draft.find((i) => i.id === poison.id);
-    //   if (i) i.name = name;
-    // });
-
-    // const description = await describePoisonDescription(poison);
-    // setItems((draft) => {
-    //   const i = draft.find((i) => i.id === poison.id);
-    //   if (i) i.description = description;
-    // });
-
-    // const container = await describePoisonContainer(poison);
-    // setItems((draft) => {
-    //   const i = draft.find((i) => i.id === poison.id);
-    //   if (i) i.notes.container = container;
-    // });
+    addItem(poison);
+    describePoison(poison, updateItem);
   }
 
-  const buttons = [{ name: "Poison", action: addPoison }];
+  async function addWeapon() {
+    const weapon = generateWeapon();
+    addItem(weapon);
+    describeWeapon(weapon, updateItem);
+  }
+
+  const buttons = [
+    { name: "Poison", action: addPoison },
+    { name: "Weapon", action: addWeapon },
+  ];
 
   console.log(items);
   return (

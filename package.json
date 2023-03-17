@@ -26,7 +26,8 @@
     "react-dom": "18.2.0",
     "sass": "^1.58.0",
     "typescript": "4.9.5",
-    "use-immer": "^0.8.1"
+    "use-immer": "^0.8.1",
+    "zustand": "^4.3.6"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.191"

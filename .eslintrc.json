@@ -15,7 +15,7 @@
     "prefer-const": "error",
     "no-var": "error",
     "arrow-body-style": ["error", "as-needed"],
-    "no-unused-vars": ["error", { "argsIgnorePattern": "_|this" }],
+    "no-unused-vars": "off", //["error", { "argsIgnorePattern": "_|this" }],
 
     // import plugin
     "import/order": [
