@@ -10,14 +10,17 @@ export default async function describe2(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  console.log("describe2", req.body);
+
   const model = "gpt-3.5-turbo";
   const completion = await openai.createChatCompletion({
     model,
+    // functions: req.body.functions,
     messages: [
       {
         role: "system",
         content:
-          "You write descriptions of fictional items for a table top roll playing game. Your writing focuses on lore and physical descriptions and avoids mechanics and rules. You use real words.",
+          "You write descriptions of fictional items for a table top roll playing game. Your writing focuses on lore and physical descriptions and avoids mechanics and rules. You use real words. Respond with only what is asked for.",
       },
       {
         role: "user",

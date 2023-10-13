@@ -6,6 +6,7 @@ import { ItemCard } from "../components/ItemCard";
 import { Item } from "../lib/item";
 import { generatePoison, describePoison } from "../lib/poison";
 import { generateWeapon, describeWeapon } from "../lib/weapon";
+import { generateRing, describeRing } from "../lib/ring";
 
 interface ItemsState {
   items: Item[];
@@ -40,9 +41,16 @@ export default function Home() {
     describeWeapon(weapon, updateItem);
   }
 
+  async function addRing() {
+    const ring = generateRing();
+    addItem(ring);
+    describeRing(ring, updateItem);
+  }
+
   const buttons = [
     { name: "Poison", action: addPoison },
     { name: "Weapon", action: addWeapon },
+    { name: "Ring", action: addRing },
   ];
 
   console.log(items);
