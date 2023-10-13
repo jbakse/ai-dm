@@ -13,7 +13,7 @@ interface ItemsState {
   update: (item: Item) => void;
 }
 
-const useItems = create<ItemsState>((set) => ({
+export const useItems = create<ItemsState>((set) => ({
   items: [],
   add: (item: Item) => set((state) => ({ items: [...state.items, item] })),
   update: (item: Item) =>
